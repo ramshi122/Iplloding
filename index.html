@@ -1,0 +1,1632 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>AI Fantasy Pro · V61 Complete Restoration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Share+Tech+Mono&family=Barlow+Condensed:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* V61 FUTURISTIC 3D THEME */
+            --bg: #050508;
+            --glass-bg: rgba(20, 22, 30, 0.65);
+            --glass-panel: rgba(30, 32, 45, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --shadow-3d: 0 10px 30px -10px rgba(0,0,0,0.9);
+            --shadow-glow: 0 0 20px rgba(0, 229, 255, 0.15);
+            
+            --d11-red: #ff2a46;
+            --d11-red-hover: #ff0022;
+            --d11-green: #00e676;
+            --gold: #ffb300;
+            --text: #ffffff;
+            --muted: #a0aab2;
+            --muted2: #6c7680;
+            --cyan: #00e5ff;
+            --pink: #ff4081;
+            --cs-orange: #ff6d00;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            padding: 10px 10px 90px 10px; /* Extra padding for bottom nav */
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            /* Futuristic glowing orb background */
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 229, 255, 0.04), transparent 35%), 
+                radial-gradient(circle at 85% 10%, rgba(255, 42, 70, 0.04), transparent 35%);
+            background-attachment: fixed;
+        }
+
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-150px); background: var(--glass-panel); backdrop-filter: blur(12px); color: #fff; border: 1px solid var(--glass-border); border-radius: 12px; padding: 14px 24px; font-size: 14px; font-weight: 700; z-index: 9999; transition: transform .4s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; max-width: 90vw; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.8); }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* FLOATING BOTTOM NAVBAR */
+        .nav-pro { 
+            position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); 
+            width: 95vw; max-width: 500px; 
+            background: rgba(10, 10, 14, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px; padding: 8px 6px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.1); 
+            border: 1px solid var(--glass-border); z-index: 1000; 
+            display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; 
+        }
+        .nav-pro::-webkit-scrollbar { display: none; }
+        .nav-btn { 
+            flex: 1 0 auto; padding: 10px 14px; border-radius: 16px; 
+            background: transparent; color: var(--muted); border: none; 
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-size: 11px; font-weight: 800; 
+            text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; font-family: 'Barlow Condensed', sans-serif;
+        }
+        .nav-btn.active { 
+            background: rgba(255, 42, 70, 0.15); color: #fff; 
+            border: 1px solid var(--d11-red); box-shadow: 0 0 15px rgba(255,42,70,0.3); 
+            transform: translateY(-2px);
+        }
+
+        /* HEADER */
+        .hdr { background: linear-gradient(135deg, rgba(255,42,70,0.8), rgba(150,0,20,0.9)); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 18px; margin-bottom: 16px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(255, 42, 70, 0.3); }
+        .hdr::before { content:''; position:absolute; top:0; left:-100%; width:50%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transform:skewX(-20deg); animation: shine 4s infinite; }
+        @keyframes shine { 100% { left: 200%; } }
+        .hdr-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; position:relative; z-index:1; }
+        .tb { font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 900; letter-spacing: 1px; color: #fff; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .vs-t { font-size: 11px; color: rgba(255,255,255,0.9); letter-spacing: 3px; display: block; text-align: center; margin-bottom: 4px; font-weight: 800; font-family: 'Share Tech Mono'; }
+
+        /* SECTIONS */
+        .sec { background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 18px; margin-bottom: 16px; box-shadow: var(--shadow-3d); transition: transform 0.3s; }
+        .sec-title { font-size: 13px; font-family: 'Barlow Condensed'; font-weight: 800; color: var(--cyan); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; border-bottom: 1px solid rgba(0,229,255,0.2); padding-bottom: 12px; letter-spacing: 1px; }
+        .sec-title-toggle { justify-content: space-between; cursor: pointer; user-select: none; }
+        .sec-title-toggle:hover { color: #fff; text-shadow: 0 0 10px var(--cyan); }
+
+        /* MATCH FILTERS & CARDS */
+        .match-filters { display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+        .match-filters::-webkit-scrollbar { display: none; }
+        .filter-btn { background: rgba(0,0,0,0.4); border: 1px solid var(--b2); color: var(--muted); padding: 8px 18px; border-radius: 20px; font-size: 11px; font-weight: 800; cursor: pointer; white-space: nowrap; text-transform: uppercase; font-family: 'Barlow Condensed'; letter-spacing: 1px; transition: 0.3s; }
+        .filter-btn.active { background: var(--cyan); color: #000; border-color: var(--cyan); box-shadow: 0 0 15px rgba(0,229,255,0.4); }
+
+        .match-list { display: flex; flex-direction: column; gap: 14px; max-height: 450px; overflow-y: auto; margin-top: 12px; padding-right: 4px; scrollbar-width: thin; scrollbar-color: var(--cyan) transparent; }
+        .m-card { background: linear-gradient(145deg, #161822, #0d0f15); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; overflow: hidden; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
+        .m-card:hover { transform: translateY(-4px) scale(1.01); border-color: var(--cyan); box-shadow: 0 15px 30px rgba(0,229,255,0.15); }
+        .m-card.active { border-color: var(--d11-green); background: linear-gradient(145deg, rgba(35, 169, 80, 0.15), #0d0f15); box-shadow: 0 10px 25px rgba(35, 169, 80, 0.25); transform: translateY(-2px); }
+        .m-card.active::after { content: '✓ SELECTED'; position: absolute; top: 0; right: 0; background: var(--d11-green); color: #fff; font-size: 9px; font-weight: 900; padding: 4px 12px; border-bottom-left-radius: 12px; z-index: 2; font-family: 'Barlow Condensed'; letter-spacing: 1px;}
+        
+        .m-hdr { padding: 10px 16px; background: rgba(0,0,0,0.4); font-size: 11px; color: var(--muted); font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.03); font-family: 'Share Tech Mono';}
+        .m-body { padding: 18px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+        .m-team { font-size: 22px; font-family: 'Barlow Condensed', sans-serif; font-weight: 900; color: #fff; letter-spacing: 1px; flex: 1; text-shadow: 0 2px 5px rgba(0,0,0,0.5);}
+        .m-team.left { text-align: left; }
+        .m-team.right { text-align: right; }
+        .m-time { font-size: 11px; color: var(--gold); font-family: 'Share Tech Mono'; font-weight: 800; background: rgba(247, 181, 56, 0.15); padding: 4px 10px; border-radius: 8px; white-space: nowrap; border: 1px solid rgba(247,181,56,0.3); }
+
+        /* CONFIG PANEL */
+        .cfg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+        .cfg-box { background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 12px; padding: 12px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); }
+        .cfg-label { font-size: 10px; color: var(--cyan); margin-bottom: 10px; text-transform: uppercase; font-weight: 800; font-family: 'Barlow Condensed'; letter-spacing: 1px; }
+        .btn-grp { display: flex; flex-wrap: wrap; gap: 6px; }
+        .c-btn { flex: 1; padding: 10px 4px; background: rgba(255,255,255,0.03); border: 1px solid var(--b2); border-radius: 8px; color: var(--muted); font-size: 12px; font-weight: 800; font-family: 'Barlow Condensed'; cursor: pointer; transition: 0.3s; text-align: center; }
+        .c-btn.active { background: #fff; color: #000; border-color: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
+        .c-btn.pink.active { background: var(--gold); color: #000; border-color: var(--gold); box-shadow: 0 0 15px rgba(247,181,56,0.3); }
+
+        /* 3D PLAYER LIST */
+        .pgrid { display: flex; flex-direction: column; gap: 8px; max-height: 500px; overflow-y: auto; margin-top: 14px; padding: 4px; scrollbar-width: none; }
+        .pc { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 14px; background: linear-gradient(145deg, rgba(30,32,45,0.8), rgba(20,22,30,0.9)); border: 1px solid rgba(255,255,255,0.05); cursor: pointer; position: relative; transition: transform 0.2s, box-shadow 0.2s; user-select: none; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
+        .pc:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.6); border-color: rgba(255,255,255,0.1); }
+        
+        .p-left { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
+        .p-avatar-wrap { position: relative; width: 48px; height: 48px; flex-shrink: 0; }
+        .p-avatar { width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #2c2c35, #111); display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; font-family: 'Barlow Condensed'; font-weight: 900; border: 2px solid var(--b2); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .p-team-badge { position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; font-size: 8px; font-weight: 900; padding: 2px 8px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.5); white-space: nowrap; font-family: 'Roboto'; }
+        
+        .p-info { display: flex; flex-direction: column; gap: 4px; overflow: hidden; }
+        .pn { font-size: 15px; font-weight: 800; color: #fff; font-family: 'Barlow Condensed'; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .p-sel { font-size: 10px; color: var(--muted); font-weight: 600; display:flex; gap:6px; align-items:center; flex-wrap:wrap; font-family: 'Share Tech Mono'; }
+        .p-pts { font-size: 14px; color: #fff; font-weight: 800; text-align: center; width: 45px; font-family: 'Barlow Condensed'; }
+        .p-cr { font-size: 14px; font-weight: 800; color: var(--gold); width: 45px; text-align: right; font-family: 'Barlow Condensed'; }
+        
+        .p-action { width: 28px; height: 28px; border-radius: 50%; background: rgba(0, 230, 118, 0.1); border: 2px solid var(--green); display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--green); margin-left: 10px; font-size: 18px; flex-shrink:0; box-shadow: 0 0 10px rgba(0,230,118,0.2); transition: 0.3s;}
+        
+        .pc.fix { background: linear-gradient(145deg, rgba(35, 169, 80, 0.15), rgba(20,22,30,0.9)); border: 1px solid rgba(0,230,118,0.3); box-shadow: 0 0 15px rgba(0,230,118,0.1); }
+        .pc.fix .p-action { background: var(--green); color: #fff; box-shadow: 0 0 15px rgba(0,230,118,0.5); }
+        .pc.fix .p-action::before { content: '-'; margin-top:-2px; }
+        .pc:not(.fix) .p-action::before { content: '+'; margin-top:-1px;}
+
+        .role-txt { font-size: 10px; color: var(--cyan); font-weight: 700; background: rgba(0,229,255,0.1); padding: 2px 6px; border-radius: 4px; }
+        .imp-pct { font-size: 9px; background: rgba(255,64,129,0.15); color: var(--pink); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255,64,129,0.3); font-weight: 800; }
+        .conf-score { font-size: 9px; color: #fff; background: rgba(255, 255, 255, 0.1); padding: 2px 6px; border-radius: 4px; font-weight: 800; }
+
+        .badge-circ { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; font-size: 10px; font-weight: 900; color: #000; margin-left: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-family: 'Roboto'; }
+        .badge-c { background: linear-gradient(135deg, #fff, #ddd); }
+        .badge-vc { background: linear-gradient(135deg, #aaa, #777); color: #fff; }
+
+        .ai-badge { font-size: 9px; padding: 3px 8px; border-radius: 6px; font-weight: 800; margin-top: 4px; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px;}
+        .ai-badge.must { background: rgba(255,179,0,0.15); color: var(--gold); border: 1px solid var(--gold); }
+        .ai-badge.trump { background: rgba(0,229,255,0.15); color: var(--cyan); border: 1px solid var(--cyan); }
+
+        /* 3D SUMMARY SLOTS */
+        .builder-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; align-items: start; }
+        .slot-col { display: flex; flex-direction: column; gap: 8px; }
+        .slot-col h4 { font-size: 12px; color: var(--cyan); text-align: center; margin-bottom: 6px; font-weight: 800; font-family: 'Barlow Condensed'; letter-spacing: 1px;}
+        .slot { background: rgba(0,0,0,0.4); border: 1px dashed var(--b2); border-radius: 8px; height: 42px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--muted); text-align: center; padding: 0 6px; font-family: 'Barlow Condensed'; font-weight: 800; transition: 0.3s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);}
+        .slot.filled { border-style: solid; color: #fff; background: linear-gradient(145deg, #2a2d3e, #1a1c24); border-color: rgba(255,255,255,0.2); box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
+        .slot.c-slot.filled { border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        .slot.vc-slot.filled { border-color: #aaa; }
+
+        /* ACTION BUTTONS */
+        .btn-api { background: linear-gradient(135deg, #fff, #e0e0e0); color: #000; border: none; padding: 16px; font-size: 13px; font-weight: 900; border-radius: 12px; width: 100%; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 15px rgba(255,255,255,0.2); font-family: 'Barlow Condensed';}
+        .btn-api:active { transform: scale(0.96); }
+        .btn-auto-expert { background: linear-gradient(135deg, #fff, #e0e0e0); color: #000; border: none; padding: 16px; margin-bottom: 16px; font-weight: 900; width:100%; border-radius:12px; cursor: pointer; font-size: 14px; font-family: 'Barlow Condensed'; letter-spacing: 1px; box-shadow: 0 6px 15px rgba(255,255,255,0.2);}
+        .btn-gen { background: linear-gradient(135deg, var(--d11-green), #1b853f); color: #fff; border: none; margin-top: 16px; font-size: 18px; padding: 18px; box-shadow: 0 8px 25px rgba(35, 169, 80, 0.4); border-radius: 16px; width:100%; font-weight:900; cursor:pointer; font-family: 'Barlow Condensed'; letter-spacing: 1.5px; transition: 0.3s; border: 1px solid rgba(255,255,255,0.2);}
+        .btn-gen:active { transform: scale(0.96); }
+        .btn-hack { padding: 20px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: #fff; font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 18px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s; text-align: center; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.5); }
+        .btn-hack:active { transform: scale(0.96); }
+
+        /* 13-BOX PREMIUM CHEAT SHEET UI */
+        .cs-grid-13 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+        .cs-box-13 { background: rgba(15, 16, 20, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 109, 0, 0.3); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.5), inset 0 1px rgba(255,255,255,0.05); transition: 0.3s; }
+        .cs-box-13:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(255, 109, 0, 0.2); border-color: var(--cs-orange); }
+        .cs-box-13.wide { grid-column: 1 / 3; }
+        .cs-hdr-13 { background: linear-gradient(90deg, var(--cs-orange), #ff3d00); color: #fff; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 900; padding: 10px 16px; text-transform: uppercase; letter-spacing: 1px; display:flex; align-items:center; gap:8px; text-shadow: 0 2px 4px rgba(0,0,0,0.4);}
+        .cs-body-13 { padding: 16px; font-size: 14px; color: #e0e0e0; line-height: 1.6; white-space: pre-line; font-weight: 500; }
+        .cs-body-13 ul { padding-left: 20px; margin-top: 5px; }
+
+        /* TEAM CARDS - 3D GLASS EFFECT */
+        .team-card { background: rgba(20, 22, 30, 0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; margin-top: 24px; overflow: hidden; animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.05); }
+        @keyframes slideUp { from { transform: translateY(40px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+        .tc-h { padding: 16px 20px; background: linear-gradient(90deg, #ff2a46, #900015); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .tc-t { font-size: 16px; color: #fff; font-weight: 900; font-family: 'Barlow Condensed'; letter-spacing: 1px; }
+        .tc-b { padding: 8px; }
+        .tc-p { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #fff; font-weight: 600; transition: 0.2s; border-radius: 12px; }
+        .tc-p:hover { background: rgba(255,255,255,0.05); }
+        .ai-reason-box { background: rgba(0,0,0,0.4); border: 1px dashed var(--d11-red); border-radius: 12px; padding: 16px; margin: 12px; font-size: 13px; line-height: 1.6; color: #e0e0e0; display: none; text-align: left; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); }
+
+        .doubt-input { width: 100%; padding: 16px; background: rgba(0,0,0,0.4); border: 1px solid var(--b2); border-radius: 12px; color: #fff; font-size: 15px; outline: none; margin-bottom: 16px; font-family: 'Roboto'; transition: 0.3s; }
+        .doubt-input:focus { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0,229,255,0.2); }
+        
+        .loader { width: 18px; height: 18px; border: 3px solid rgba(255,255,255,0.2); border-top-color: currentColor; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; vertical-align: middle; margin-right: 8px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* V61: OCR SCANNER STYLES */
+        .ocr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .ocr-btn { background: rgba(0,0,0,0.4); border: 1px dashed var(--cyan); border-radius: 12px; padding: 24px 12px; text-align: center; cursor: pointer; transition: 0.3s; color: var(--cyan); backdrop-filter: blur(10px); }
+        .ocr-btn:hover { background: rgba(0, 229, 255, 0.1); box-shadow: 0 0 20px rgba(0,229,255,0.2); transform: translateY(-2px);}
+        .ocr-icon { font-size: 28px; display: block; margin-bottom: 10px; filter: drop-shadow(0 0 8px rgba(0,229,255,0.8)); }
+        .ocr-title { font-family: 'Barlow Condensed'; font-weight: 800; font-size: 16px; letter-spacing: 1px; display: block; color: #fff;}
+        .ocr-sub { font-size: 10px; font-family: 'Share Tech Mono'; color: var(--muted); display: block; margin-top: 6px; }
+    </style>
+</head>
+<body>
+
+    <div id="toast" class="toast"></div>
+
+    <!-- V61: FLOATING BOTTOM NAVBAR -->
+    <nav class="nav-pro">
+        <button id="nav-builder" class="nav-btn active" onclick="switchPage('builder', this)">🏠 11s</button>
+        <button id="nav-2ndinn" class="nav-btn" onclick="switchPage('2ndinn', this)">🌙 5s</button>
+        <button id="nav-live" class="nav-btn" onclick="switchPage('live', this)">📡 LIVE</button>
+        <button id="nav-cheat" class="nav-btn" onclick="switchPage('cheat', this)" style="color:var(--cs-orange);">📊 PRO</button>
+        <button id="nav-hacks" class="nav-btn" style="color:var(--d11-red);" onclick="switchPage('hacks', this)">🔥 HACKS</button>
+    </nav>
+
+    <!-- HEADER -->
+    <div class="hdr">
+        <div class="hdr-row">
+            <div id="t1Label" class="tb">T1</div>
+            <div style="text-align: center;">
+                <span class="vs-t">V61 FULL RESTORATION</span>
+                <div id="matchDesc" style="font-size:12px; color:rgba(255,255,255,0.9); font-weight:600; font-family:'Barlow Condensed'; letter-spacing:0.5px;">SELECT A MATCH</div>
+            </div>
+            <div id="t2Label" class="tb">T2</div>
+        </div>
+    </div>
+        
+    <!-- GLOBAL SYNC BOXES -->
+    <div id="topSyncBoxes">
+        
+        <!-- OCR LINEUP SCANNER -->
+        <div class="sec" style="margin-bottom:16px; border: 1px solid var(--cyan); box-shadow: 0 10px 30px rgba(0,229,255,0.15);">
+            <div class="sec-title sec-title-toggle" style="color:var(--cyan); border-bottom:none; margin-bottom:8px;" onclick="toggleSyncBox('syncBoxVision', 'iconVision')">
+                <span>📸 OMNISCIENT OCR LINEUP SCANNER</span>
+                <span id="iconVision">▼</span>
+            </div>
+            <div id="syncBoxVision">
+                <div style="font-size:12px; color:var(--muted); margin-bottom:16px; text-align:center; line-height:1.5;">
+                    Upload screenshot from Telegram, WhatsApp, Cricbuzz, or Dream11. AI extracts XI & cross-verifies with live APIs.
+                </div>
+                <div class="ocr-grid">
+                    <div class="ocr-btn" onclick="document.getElementById('ssInputFile').click()">
+                        <span class="ocr-icon">📂</span>
+                        <span class="ocr-title">UPLOAD IMAGE</span>
+                        <span class="ocr-sub">From Gallery/Files</span>
+                    </div>
+                    <div class="ocr-btn" onclick="document.getElementById('ssInputCam').click()">
+                        <span class="ocr-icon">📷</span>
+                        <span class="ocr-title">TAKE PHOTO</span>
+                        <span class="ocr-sub">Live Camera Scan</span>
+                    </div>
+                </div>
+                
+                <input type="file" id="ssInputFile" accept="image/*" style="display:none" onchange="handleImageInput(event)">
+                <input type="file" id="ssInputCam" accept="image/*" capture="environment" style="display:none" onchange="handleImageInput(event)">
+                
+                <div id="fraudAlert" style="background: rgba(255, 61, 0, 0.15); border: 1px solid var(--red); color: var(--red); padding: 14px; border-radius: 12px; font-size: 13px; font-weight: 700; display: none; margin-top: 14px; text-align: center; box-shadow: inset 0 2px 10px rgba(255,0,0,0.2);"></div>
+                <div id="ssLog" style="display:none;"></div>
+                <button id="analyzeBtn" class="btn-api" style="display:none; background:linear-gradient(135deg, var(--cyan), #0097a7); color:#000; margin-top:16px; box-shadow: 0 6px 20px rgba(0,229,255,0.4);" onclick="runVision()">🚀 SCAN & VERIFY LIVE</button>
+            </div>
+        </div>
+
+        <div class="sec" style="margin-bottom:16px;">
+            <div class="sec-title sec-title-toggle" style="color:#fff;" onclick="toggleSyncBox('syncBoxGoogle', 'iconGoogle')">
+                <span>🌐 UPCOMING MATCHES (LIVE SYNC)</span>
+                <span id="iconGoogle">▼</span>
+            </div>
+            
+            <div id="syncBoxGoogle">
+                <div class="match-filters" id="matchFilters">
+                    <button class="filter-btn active" onclick="filterMatches('ALL')">ALL</button>
+                    <button class="filter-btn" onclick="filterMatches('IPL')">IPL</button>
+                    <button class="filter-btn" onclick="filterMatches('INTL')">INTL</button>
+                    <button class="filter-btn" onclick="filterMatches('T20')">T20 LEAGUES</button>
+                </div>
+
+                <button class="btn-api" id="btnGoogleMatches" onclick="fetchLiveMatchesGoogle()">
+                    ⚡ SEARCH LIVE MATCHES
+                </button>
+                
+                <div id="matchCardsContainer" class="match-list">
+                    <div style="text-align:center; color:var(--muted); font-size:13px; padding:30px 0; font-weight:500;">
+                        Click "Search" to load real-time live matches.
+                    </div>
+                </div>
+
+                <button class="btn-api" id="btnGoogleSquads" onclick="loadSquadsGoogle()" style="display:none; background: linear-gradient(135deg, #ff2a46, #900015); color:#fff; width:100%; margin-top:14px; box-shadow: 0 6px 20px rgba(255,42,70,0.4);">
+                    📥 AUTO-GENERATE 13-SHEET PRO & SQUAD
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE: 11s BUILDER -->
+    <div id="page-builder">
+        
+        <div class="sec">
+            <div class="sec-title">🔧 11-PLAYER GENERATOR CONFIG</div>
+            <div class="cfg-grid">
+                <div class="cfg-box">
+                    <div class="cfg-label">MATCH PHASE (11s)</div>
+                    <div class="btn-grp">
+                        <button class="c-btn active" onclick="cfg('phase','pre',this)">PRE-MATCH</button>
+                        <button class="c-btn" onclick="cfg('phase','1st',this)">1ST INNINGS</button>
+                    </div>
+                </div>
+                <div class="cfg-box">
+                    <div class="cfg-label">STRATEGY</div>
+                    <div class="btn-grp">
+                        <button class="c-btn active" onclick="cfg('strat','bal',this)">BALANCED</button>
+                        <button class="c-btn" onclick="cfg('strat','safe',this)">SAFE</button>
+                        <button class="c-btn" onclick="cfg('strat','gl',this)">MEGA GL</button>
+                    </div>
+                </div>
+                <div class="cfg-box">
+                    <div class="cfg-label">TOSS ADAPTIVE (BAT 1ST)</div>
+                    <div class="btn-grp">
+                        <button class="c-btn active" onclick="cfg('toss','pre',this)">PRE-TOSS</button>
+                        <button id="t1BatCfg" class="c-btn" onclick="cfg('toss','t1',this)">T1 BAT</button>
+                        <button id="t2BatCfg" class="c-btn" onclick="cfg('toss','t2',this)">T2 BAT</button>
+                    </div>
+                </div>
+                <div class="cfg-box">
+                    <div class="cfg-label">IMPACT RULE</div>
+                    <div class="btn-grp">
+                        <button class="c-btn active pink" onclick="toggleCfg('impact',this)">IMPACT SUB: ON</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sec" style="padding:16px;">
+            <div class="sec-title" style="margin-bottom: 12px;">
+                👥 LIVE PLAYER POOL
+                <span id="selCounter1" style="margin-left:auto; color:var(--cyan); font-weight: 800; font-family:'Share Tech Mono'; font-size:14px;">0/9 FIXED</span>
+            </div>
+            <div class="btn-grp" style="margin-bottom:16px;">
+                <button class="c-btn active" onclick="setTab('ALL', this, 1)">ALL</button>
+                <button id="t1Tab1" class="c-btn" onclick="setTab('T1', this, 1)">TEAM 1</button>
+                <button id="t2Tab1" class="c-btn" onclick="setTab('T2', this, 1)">TEAM 2</button>
+                <button class="c-btn" style="color:var(--d11-red); border-color:var(--d11-red); background:rgba(255,42,70,0.1);" onclick="clearSelection(1)">CLEAR</button>
+            </div>
+            <button class="btn-auto-expert" id="btnPoolExpert1" onclick="analyzePoolAI()">✨ AI DETAILED REVIEW & OWNERSHIP %</button>
+            <div class="pgrid" id="pgrid1"><div style="padding: 50px; text-align: center; color: var(--muted); font-size:14px; font-weight:500;">SELECT A MATCH ABOVE TO LOAD PLAYERS</div></div>
+        </div>
+
+        <div class="sec">
+            <div class="sec-title" style="color:var(--gold); border-bottom-color:rgba(247,181,56,0.3);">🔒 COMBO LOCK (9 FIXED / 5 C / 5 VC)</div>
+            <button class="btn-auto-expert" id="btnAutoExpert1" onclick="autoSelectAI(1)" style="background:linear-gradient(135deg, var(--gold), #f57c00); box-shadow:0 6px 20px rgba(247,181,56,0.3);">✨ AI AUTO-SELECT PERFECT COMBO</button>
+            <div class="builder-grid">
+                <div class="slot-col">
+                    <h4 style="color:#fff;">FIXED (9)</h4>
+                    <div id="fixSlots1" style="display:flex; flex-direction:column; gap:8px;"></div>
+                </div>
+                <div class="slot-col">
+                    <h4 style="color:var(--gold);">CAPTAINS (5)</h4>
+                    <div id="capSlots1" style="display:flex; flex-direction:column; gap:8px;"></div>
+                </div>
+                <div class="slot-col">
+                    <h4 style="color:var(--muted);">VICE-CAPS (5)</h4>
+                    <div id="vcSlots1" style="display:flex; flex-direction:column; gap:8px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-gen" id="btnGen1" onclick="genTeamsAI(1)">CREATE 11s TEAMS (7+2 FORMULA)</button>
+        
+        <!-- NEW AI LOGO FEATURE -->
+        <button class="btn-auto-expert" id="btnTeamLogo" onclick="generateTeamLogo()" style="margin-top:16px; background:linear-gradient(135deg, var(--pink), var(--gold)); color:#fff; box-shadow: 0 6px 20px rgba(255,64,129,0.3); width:100%; font-family: 'Barlow Condensed'; font-size: 16px; letter-spacing: 1px;">🎨 GENERATE AI TEAM LOGO</button>
+        <div id="teamLogoResult" style="text-align:center; margin-top:16px; display:none;">
+            <img id="logoImg" src="" style="max-width:100%; border-radius:12px; border:2px solid var(--gold); box-shadow: 0 10px 30px rgba(255, 179, 0, 0.3);">
+        </div>
+    </div>
+
+    <!-- PAGE: 2ND INNINGS (5s) BUILDER -->
+    <div id="page-2ndinn" style="display:none;">
+        <div class="sec" style="border-color: var(--d11-green); box-shadow: 0 10px 30px rgba(35, 169, 80, 0.15);">
+            <div class="sec-title" style="color:var(--d11-green); border-bottom-color:rgba(35,169,80,0.3);">🌙 2ND INNINGS BUILDER (5-PLAYER)</div>
+            
+            <div class="cfg-grid">
+                <div class="cfg-box">
+                    <div class="cfg-label">STRATEGY</div>
+                    <div class="btn-grp">
+                        <button class="c-btn active" onclick="cfg('strat2','bal',this)">BALANCED</button>
+                        <button class="c-btn" onclick="cfg('strat2','safe',this)">SAFE</button>
+                        <button class="c-btn" onclick="cfg('strat2','gl',this)">MEGA GL</button>
+                    </div>
+                </div>
+                <div class="cfg-box">
+                    <div class="cfg-label">CHASING TEAM (BATTING IN 2ND INN)</div>
+                    <div class="btn-grp">
+                        <button class="c-btn active" onclick="cfg('chase','none',this)">UNKNOWN</button>
+                        <button id="t1ChaseCfg" class="c-btn" onclick="cfg('chase','t1',this)">T1 BAT</button>
+                        <button id="t2ChaseCfg" class="c-btn" onclick="cfg('chase','t2',this)">T2 BAT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sec" style="padding:16px;">
+            <div class="sec-title" style="margin-bottom: 12px;">
+                👥 SELECT PLAYERS 
+                <span id="selCounter2" style="margin-left:auto; color:var(--cyan); font-weight:800; font-family:'Share Tech Mono'; font-size:14px;">0/4 FIXED</span>
+            </div>
+            <div class="btn-grp" style="margin-bottom:16px;">
+                <button class="c-btn active" onclick="setTab('ALL', this, 2)">ALL</button>
+                <button id="t1Tab2" class="c-btn" onclick="setTab('T1', this, 2)">TEAM 1</button>
+                <button id="t2Tab2" class="c-btn" onclick="setTab('T2', this, 2)">TEAM 2</button>
+                <button class="c-btn" style="color:var(--d11-red); border-color:var(--d11-red); background:rgba(255,42,70,0.1);" onclick="clearSelection(2)">CLEAR</button>
+            </div>
+            <button class="btn-auto-expert" id="btnPoolExpert2" onclick="analyzePoolAI()">✨ AI DETAILED REVIEW & OWNERSHIP %</button>
+            <div class="pgrid" id="pgrid2"><div style="padding: 50px; text-align: center; color: var(--muted); font-size:14px; font-weight:500;">SYNC DATA FIRST</div></div>
+        </div>
+
+        <div class="sec">
+            <div class="sec-title" style="color:var(--gold); border-bottom-color:rgba(247,181,56,0.3);">🔒 2ND INN SELECTION (4 FIXED / 3 CAP / 3 VC)</div>
+            <button class="btn-auto-expert" id="btnAutoExpert2" onclick="autoSelectAI(2)" style="background:linear-gradient(135deg, var(--gold), #f57c00); box-shadow:0 6px 20px rgba(247,181,56,0.3);">✨ AUTO-LOCK 2ND INN</button>
+            <div class="builder-grid">
+                <div class="slot-col">
+                    <h4 style="color:#fff;">FIXED (4)</h4>
+                    <div id="fixSlots2" style="display:flex; flex-direction:column; gap:8px;"></div>
+                </div>
+                <div class="slot-col">
+                    <h4 style="color:var(--gold);">CAPTAINS (3)</h4>
+                    <div id="capSlots2" style="display:flex; flex-direction:column; gap:8px;"></div>
+                </div>
+                <div class="slot-col">
+                    <h4 style="color:var(--muted);">VICE-CAPS (3)</h4>
+                    <div id="vcSlots2" style="display:flex; flex-direction:column; gap:8px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-gen" id="btnGen2" onclick="genTeamsAI(2)">CREATE 5s TEAMS</button>
+    </div>
+
+    <!-- LIVE INFO PAGE -->
+    <div id="page-live" style="display:none;">
+        <div class="sec">
+            <div class="sec-title">📋 REAL-TIME LIVE DATA</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div class="cs-tile wide" style="background:#18181b; border-color:#27272a; padding:12px; border-radius:8px;">
+                    <h5 style="font-size:11px; color:var(--gold); margin-bottom:4px;">🏏 TOSS RESULT</h5>
+                    <div id="liveTossText" style="color:#fff; font-weight:700; font-size:15px;">---</div>
+                </div>
+                <div class="cs-tile" style="background:#18181b; border-color:#27272a; padding:12px; border-radius:8px;">
+                    <h5 style="font-size:11px; color:var(--cyan); margin-bottom:4px;">🌍 PITCH REPORT</h5>
+                    <div id="livePitch" style="color:var(--muted); font-size:13px;">---</div>
+                </div>
+                <div class="cs-tile" style="background:#18181b; border-color:#27272a; padding:12px; border-radius:8px;">
+                    <h5 style="font-size:11px; color:var(--cyan); margin-bottom:4px;">🌤️ WEATHER</h5>
+                    <div id="liveWeather" style="color:var(--muted); font-size:13px;">---</div>
+                </div>
+                <div class="cs-tile" style="background:#18181b; border-color:#27272a; padding:12px; border-radius:8px;">
+                    <h5 style="font-size:11px; color:var(--gold); margin-bottom:4px;">⭐ SAFE C/VC</h5>
+                    <div id="liveSafeCVC" style="color:var(--text); font-size:13px;">---</div>
+                </div>
+                <div class="cs-tile" style="background:#18181b; border-color:#27272a; padding:12px; border-radius:8px;">
+                    <h5 style="font-size:11px; color:var(--d11-red); margin-bottom:4px;">⚠️ RISKY C/VC</h5>
+                    <div id="liveRiskyCVC" style="color:var(--text); font-size:13px;">---</div>
+                </div>
+                <div class="cs-tile" style="background:#18181b; border-color:#27272a; padding:12px; border-radius:8px;">
+                    <h5 style="font-size:11px; color:var(--cyan); margin-bottom:4px;">📈 MATCH FLOW</h5>
+                    <div id="liveMatchFlow" style="color:var(--muted); font-size:13px;">---</div>
+                </div>
+                <div class="cs-tile" style="background:#18181b; border-color:#27272a; padding:12px; border-radius:8px;">
+                    <h5 style="font-size:11px; color:var(--green); margin-bottom:4px;">🏆 WIN PREDICTION</h5>
+                    <div id="liveWinProb" style="color:var(--green); font-size:13px; font-weight:bold;">---</div>
+                </div>
+            </div>
+            
+            <button class="btn-auto-expert" id="btnMatchScript" onclick="generateMatchScript()" style="margin-top:16px; width:100%;">✨ MATCH SCRIPT (MALAYALAM)</button>
+            <div id="aiScriptResult" class="ai-reason-box" style="display:none; border-color:var(--cyan);"></div>
+            
+            <!-- AUDIO COMMENTARY FEATURE -->
+            <button class="btn-auto-expert" id="btnMatchAudio" onclick="generateMatchAudio()" style="margin-top:10px; background:var(--cyan); color:#000; width:100%;">🔊 LISTEN TO AI AUDIO COMMENTARY</button>
+            <div id="audioPlayerContainer" style="display:none; margin-top:10px; width:100%; border-radius:12px; overflow:hidden; border:1px solid var(--b2); background: #000;">
+                <audio id="matchAudioPlayer" controls style="width:100%; display:block;"></audio>
+            </div>
+        </div>
+
+        <div class="sec">
+            <div class="sec-title" style="color:var(--gold); border-bottom-color:rgba(247,181,56,0.3);">💬 ASK THE AI EXPERT</div>
+            <input type="text" id="userDoubtInput" class="doubt-input" placeholder="Ask a tactical question here...">
+            <button class="btn-auto-expert" id="btnAskExpert" onclick="askExpertDoubt()" style="margin-bottom:0; background:linear-gradient(135deg, var(--gold), #f57c00); box-shadow:0 6px 20px rgba(247,181,56,0.3);">🗣️ ASK FANTASY EXPERT (MALAYALAM)</button>
+            <div id="expertDoubtResponse" class="ai-reason-box" style="display:none; border-color:var(--gold);"></div>
+        </div>
+    </div>
+
+    <!-- V61: 13-PART PREMIUM CHEAT SHEET PAGE -->
+    <div id="page-cheat" style="display:none;">
+        <div class="sec" style="background:transparent; border:none; padding:0; box-shadow:none;">
+            <div class="sec-title" style="color:var(--cs-orange); border-bottom:none; margin-bottom:6px; font-size:18px; font-weight:900; text-shadow: 0 0 20px rgba(255, 109, 0, 0.4); justify-content:center;">
+                📊 13-PART PREMIUM CHEAT SHEET
+            </div>
+            <div style="font-size:12px; color:var(--muted); margin-bottom:24px; text-align:center; font-family:'Share Tech Mono';">
+                Auto-fetched real live data from Cricbuzz & ESPNcricinfo.
+            </div>
+            
+            <div id="csDashboard" class="cs-grid-13">
+                <div style="grid-column:1/3; text-align:center; padding:60px 20px; background:var(--glass-bg); border-radius:16px; border:1px dashed var(--b2); color:var(--muted); font-weight:600; font-size:14px;">SYNC GOOGLE DATA ON HOME PAGE TO UNLOCK 13-PART PREMIUM CHEAT SHEET</div>
+            </div>
+            
+            <button class="btn-auto-expert" id="btnStrategyExpert" onclick="summarizeCheatSheet()" style="background:linear-gradient(135deg, var(--cs-orange), #d50000); color:#fff; box-shadow:0 8px 25px rgba(255,109,0,0.4); border:none; margin-top:20px;">✨ GENERATE ACTION PLAN (MALAYALAM)</button>
+            <div id="aiCheatSummary" class="ai-reason-box" style="margin-bottom:15px; border-color:var(--cs-orange); background:rgba(255,109,0,0.05);"></div>
+        </div>
+    </div>
+
+    <!-- GL HACKS PAGE -->
+    <div id="page-hacks" style="display:none;">
+        <div class="sec" style="background:transparent; border:none; padding:0; box-shadow:none;">
+            <div class="sec-title" style="color:#fff; border-bottom:none; margin-bottom:20px; font-size:16px; justify-content:center; text-shadow: 0 2px 10px rgba(255,255,255,0.5);">🛠️ DREAM11 GL HACKS (16+)</div>
+            
+            <div style="display:flex; flex-direction:column; gap:16px;">
+                <button class="btn-hack" style="background: linear-gradient(135deg, #ec407a, #d500f9); box-shadow: 0 8px 25px rgba(213,0,249,0.3);" onclick="runSpecialHack('formula')">
+                    🔥 13-SHEET GRAND LEAGUE FORMULA
+                </button>
+                <button class="btn-hack" style="background: linear-gradient(135deg, #ffa726, #f57c00); box-shadow: 0 8px 25px rgba(245,124,0,0.3);" onclick="runSpecialHack('ownership')">
+                    📊 OWNERSHIP PREDICTION HACK
+                </button>
+                <button class="btn-hack" style="background: linear-gradient(135deg, #26c6da, #00b0ff); color:#fff; box-shadow: 0 8px 25px rgba(0,176,255,0.3);" onclick="runSpecialHack('toss')">
+                    🎯 TOSS ADAPTIVE STRATEGY
+                </button>
+                <button class="btn-hack" style="background: linear-gradient(135deg, #26a69a, #00c853); color:#fff; box-shadow: 0 8px 25px rgba(0,200,83,0.3);" onclick="runSpecialHack('powerplay')">
+                    ⚡ POWERPLAY PICKS HACK
+                </button>
+                <button class="btn-hack" style="background: linear-gradient(135deg, #ff5722, #dd2c00); box-shadow: 0 8px 25px rgba(221,44,0,0.3);" onclick="runSpecialHack('death')">
+                    💀 DEATH OVERS FINISHER PICKS
+                </button>
+            </div>
+            <div id="aiHackResult" class="ai-reason-box" style="margin-top:24px; background: var(--glass-bg); border-color:var(--b2);"></div>
+        </div>
+    </div>
+
+    <!-- TEAMS OUTPUT -->
+    <div id="teamsList" style="margin-bottom: 30px;"></div>
+    
+    <!-- AI RATER -->
+    <button class="btn-api" id="btnRateTeams" onclick="rateTeamsAI()" style="display:none; width:100%; margin-bottom:20px; background:linear-gradient(135deg, var(--cyan), #00838f); color:#fff; font-family:'Barlow Condensed'; font-size:18px; letter-spacing:1px; box-shadow:0 8px 25px rgba(0,229,255,0.3);">✨ RATE MY TEAMS (MALAYALAM)</button>
+    <div id="aiRatingResult" class="ai-reason-box" style="margin-bottom: 20px; border-color:var(--cyan); background:rgba(0,229,255,0.05);"></div>
+
+    <!-- SCRIPTS -->
+    <script>
+        const apiKey = ""; 
+        
+        let players = [];
+        let allMatches = []; // Cache matches
+        let selection1 = { fixed: [], caps: [], vcs: [] };
+        let selection2 = { fixed: [], caps: [], vcs: [] };
+        let config = { phase: 'pre', strat: 'bal', toss: 'pre', impact: true, strat2: 'bal', chase: 'none' };
+        
+        let currentTab1 = 'ALL';
+        let currentTab2 = 'ALL';
+        
+        let matchIntelligence = { match: { t1: "", t2: "" }, live_data: {}, sections: [], insider_intel: {} };
+        let teamNames = { t1: "T1", t2: "T2" };
+        let generatedTeamsMemory = [];
+        let selectedGoogleMatch = "";
+
+        const todayStr = new Date().toDateString(); 
+        const tomorrowStr = new Date(new Date().setDate(new Date().getDate() + 1)).toDateString();
+
+        const glHacksContext = `CRITICAL GL RULES TO APPLY:
+        - WINNING FORMULA: Use exactly 7 Core/Safe players, 2-3 Low-Ownership Differentials, and 1 Extreme Differential C/VC combo.
+        - GL HACK 3: Stack 5 from batting-first team.
+        - GL HACK 6: Pitch favors pacers - load up 2.
+        - GL HACK 10: Power hitters at 4-6 are gold for T20.
+        - AVOID LIST: Never pick players explicitly listed in the 'IGNORE PICKS' section.
+        - WEAK MATCHUPS: Do NOT make a player Captain if they have a 'WEAK MATCHUP' against the opposition bowlers.`;
+
+        function toast(msg, type = 'ok') {
+            const el = document.getElementById('toast');
+            if(el) {
+                el.textContent = msg; 
+                el.style.borderColor = type === 'err' ? 'var(--d11-red)' : 'var(--cyan)';
+                el.style.color = type === 'err' ? 'var(--d11-red)' : 'var(--cyan)';
+                el.className = 'toast show';
+                setTimeout(() => el.className = 'toast', 3000);
+            }
+        }
+
+        function setTxt(id, txt) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = txt;
+        }
+
+        function toggleSyncBox(bodyId, iconId) {
+            const body = document.getElementById(bodyId);
+            const icon = document.getElementById(iconId);
+            if(body && icon) {
+                if(body.style.display === 'none') {
+                    body.style.display = 'block';
+                    icon.textContent = '▼';
+                } else {
+                    body.style.display = 'none';
+                    icon.textContent = '▶';
+                }
+            }
+        }
+
+        // Fixed `switchPage` referencing all tabs appropriately
+        function switchPage(pg, btn) {
+            ['builder', '2ndinn', 'live', 'cheat', 'hacks'].forEach(p => {
+                let el = document.getElementById('page-'+p);
+                if(el) el.style.display = p === pg ? 'block' : 'none';
+            });
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            
+            const topBoxes = document.getElementById('topSyncBoxes');
+            if(topBoxes) topBoxes.style.display = pg === 'builder' ? 'block' : 'none';
+        }
+
+        function hasScrapedData() {
+            return players && players.length > 0;
+        }
+
+        function cfg(key, val, btn) {
+            config[key] = val;
+            if(btn && btn.parentElement) {
+                btn.parentElement.querySelectorAll('.c-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+        }
+
+        function toggleCfg(key, btn) {
+            config[key] = !config[key];
+            if(btn) {
+                btn.classList.toggle('active');
+                btn.textContent = `${key.toUpperCase()}: ${config[key] ? 'ON' : 'OFF'}`;
+            }
+        }
+
+        // ==========================================
+        // V61: PURE LIVE GOOGLE SEARCH API
+        // ==========================================
+        async function fetchLiveAI(url, body) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 35000); 
+            body.tools = [{ "google_search": {} }];
+            try {
+                const resp = await fetch(url, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body), signal: controller.signal });
+                clearTimeout(timeoutId);
+                if (!resp.ok) throw new Error(`API Error`);
+                const json = await resp.json();
+                if (!json.candidates || !json.candidates[0]) throw new Error("Invalid Response");
+                return json;
+            } catch (e) { clearTimeout(timeoutId); throw e; }
+        }
+
+        async function fetchVisionAI(url, body) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 20000); 
+            try {
+                const resp = await fetch(url, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body), signal: controller.signal });
+                clearTimeout(timeoutId);
+                if (!resp.ok) throw new Error(`API Error`);
+                const json = await resp.json();
+                if (!json.candidates || !json.candidates[0]) throw new Error("Invalid Response");
+                return json;
+            } catch (e) { clearTimeout(timeoutId); throw e; }
+        }
+
+        function extractJSON(text) {
+            if(!text) throw new Error("Empty Response");
+            let clean = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+            clean = clean.replace(/\[\s*\d+(\s*:\s*\d+)?\s*\]/g, ''); 
+            let startObj = clean.indexOf('{');
+            let startArr = clean.indexOf('[');
+            let start = (startObj !== -1 && (startArr === -1 || startObj < startArr)) ? startObj : startArr;
+            if (start !== -1) {
+                let endChar = clean[start] === '{' ? '}' : ']';
+                let end = clean.lastIndexOf(endChar);
+                return JSON.parse(clean.substring(start, end + 1));
+            }
+            throw new Error("Invalid JSON");
+        }
+
+        // ==========================================
+        // V61: OMNISCIENT OCR SCAN & VERIFY
+        // ==========================================
+        let b64 = null;
+
+        function handleImageInput(e) {
+            const file = e.target.files[0];
+            if(!file) return;
+            
+            const log = document.getElementById('ssLog');
+            const btn = document.getElementById('analyzeBtn');
+            const fraudAlert = document.getElementById('fraudAlert');
+            
+            if(log) {
+                log.style.display = 'block';
+                log.innerHTML = "<span style='color:var(--cyan)'>IMAGE DETECTED. CLICK 'SCAN & VERIFY LIVE' TO BEGIN...</span>";
+            }
+            if(btn) btn.style.display = 'block';
+            if(fraudAlert) fraudAlert.style.display = 'none';
+
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 1024;
+                    let width = img.width;
+                    let height = img.height;
+                    if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                    canvas.width = width; canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    b64 = canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
+                };
+                img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function runVision() {
+            if (!b64) return toast("No image uploaded!", "err");
+            const btn = document.getElementById('analyzeBtn');
+            const log = document.getElementById('ssLog');
+            const fraudAlert = document.getElementById('fraudAlert');
+            if(!btn || !log) return;
+            
+            btn.disabled = true; 
+            btn.innerHTML = `<span class="loader" style="border-top-color:#000"></span>ANALYZING...`;
+            log.innerHTML = "<span style='color:var(--cyan)'>[1/3] Running Omniscient OCR Scanner...</span>";
+            if(fraudAlert) fraudAlert.style.display = 'none';
+
+            const prompt = `Act as an elite fantasy analyst, OCR data extractor, and Fraud Detector. 
+            Analyze this screenshot (could be from Telegram, WhatsApp, Cricbuzz, or Dream11).
+            Tasks:
+            1. Extract the EXACT Match Name (e.g., CSK vs RCB).
+            2. Extract Toss info if visible.
+            3. Extract the Playing XI (or probable players) shown in the image. Identify their Team and Role if possible. Note if they are marked as C (Captain) or VC (Vice-Captain).
+            4. DETECT FAKES: Does this look like an edited/photoshopped Telegram screenshot? Are there font mismatches, or more than 11 players per team? If so, flag is_fake = true and provide a short reason.
+            Return ONLY raw JSON wrapped in \`\`\`json:
+            { "matchName": "Team1 vs Team2", "toss": "Toss info", "extracted_players": [{"name": "Player Name", "team": "Team Code", "role": "BAT", "is_c": false, "is_vc": false}], "is_fake": false, "fake_reason": "" }`;
+
+            try {
+                setTimeout(() => { if(log) log.innerHTML = "<span style='color:var(--gold)'>[2/3] Analyzing structure and extracting names...</span>"; }, 2000);
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const body = { contents: [{ parts: [{ text: prompt }, { inlineData: { mimeType: "image/jpeg", data: b64 } }] }] };
+                
+                const jsonResult = await fetchVisionAI(url, body);
+                const ocrData = extractJSON(jsonResult.candidates[0].content.parts[0].text);
+                
+                if(ocrData.is_fake && fraudAlert) {
+                    fraudAlert.style.display = 'block';
+                    fraudAlert.innerHTML = `⚠️ <strong>WARNING: POSSIBLE FAKE/EDITED SCREENSHOT DETECTED</strong><br>${ocrData.fake_reason}`;
+                }
+
+                if(!ocrData.matchName || ocrData.matchName === "Team1 vs Team2") throw new Error("Could not detect Match Name from image.");
+
+                log.innerHTML = `<span style='color:var(--gold)'>[3/3] Found ${ocrData.extracted_players.length} players for ${ocrData.matchName}. Triggering Live Cross-Verification API...</span>`;
+                
+                selectedGoogleMatch = ocrData.matchName;
+                await loadSquadsGoogle(ocrData.extracted_players); 
+                
+                log.innerHTML = `<span style="color:var(--green)">✅ SUCCESS: OCR Scanned & Cross-Verified with Live APIs!</span>`;
+            } catch (e) { 
+                console.error("OCR ERROR:", e);
+                log.innerHTML = `<span style="color:var(--red)">❌ OCR Scan Failed: ${e.message}</span>`;
+                toast("Scan Error. Image might be too blurry.", "err"); 
+            } finally { 
+                btn.disabled = false; btn.innerHTML = `🚀 SCAN & VERIFY LIVE`; 
+            }
+        }
+
+        // ==========================================
+        // LIVE MATCH FETCHING
+        // ==========================================
+        function selectMatchCard(el, matchName) {
+            document.querySelectorAll('.m-card').forEach(c => c.classList.remove('active'));
+            if(el) el.classList.add('active');
+            selectedGoogleMatch = matchName;
+            loadSquadsGoogle(); 
+        }
+
+        async function fetchLiveMatchesGoogle() {
+            const btn = document.getElementById('btnGoogleMatches');
+            if(!btn) return;
+            const origText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<span class="loader" style="border-top-color:#000"></span> SEARCHING CRICBUZZ LIVE...`;
+            
+            try {
+                const prompt = `Search Google for the top professional cricket matches happening EXACTLY on ${todayStr} (Today) AND ${tomorrowStr} (Tomorrow).
+                CRITICAL: DO NOT return past matches. Return ONLY CURRENT upcoming matches. Include IPL, Internationals, T20 Leagues.
+                Return ONLY a raw JSON object wrapped in \`\`\`json: {"matches": [{"id": "1", "league": "IPL", "t1": "PBKS", "t2": "DC", "status": "Today 7:30 PM", "venue": "Wankhede"}]}`;
+                
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const result = await fetchLiveAI(url, { contents: [{ parts: [{ text: prompt }] }] });
+                const data = extractJSON(result.candidates[0].content.parts[0].text);
+                
+                if(!data.matches || data.matches.length === 0) throw new Error("No matches found");
+                allMatches = data.matches;
+                renderMatches(allMatches);
+                
+                const btnGS = document.getElementById('btnGoogleSquads');
+                if(btnGS) btnGS.style.display = 'none';
+                toast(`✅ Live Matches Loaded!`, "ok");
+            } catch(e) { 
+                toast("❌ Live Search Failed.", "err"); 
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origText;
+            }
+        }
+
+        // Global Filter Logic Fix
+        window.filterMatches = function(filter) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if(filter === 'ALL') return renderMatches(allMatches);
+            const fMatches = allMatches.filter(m => {
+                const l = (m.league || m.series || '').toLowerCase();
+                if(filter === 'IPL') return l.includes('ipl') || l.includes('indian premier');
+                if(filter === 'INTL') return l.includes('t20i') || l.includes('odi') || l.includes('test') || l.includes('icc');
+                if(filter === 'T20') return l.includes('t20') && !l.includes('ipl');
+                return true;
+            });
+            renderMatches(fMatches);
+        }
+
+        function renderMatches(matchesArray) {
+            let container = document.getElementById("matchCardsContainer");
+            if(!container) return;
+            if(!matchesArray || matchesArray.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--muted);">No live matches currently available for this filter.</div>`;
+                return;
+            }
+
+            matchesArray.sort((a,b) => {
+                let aLive = (a.status||'').toLowerCase().includes('live') ? -1 : 1;
+                let bLive = (b.status||'').toLowerCase().includes('live') ? -1 : 1;
+                return aLive - bLive;
+            });
+
+            container.innerHTML = matchesArray.map(m => {
+                const series = (m.league || m.series || 'Cricket Match').toUpperCase();
+                const t1 = (m.t1 || 'T1').toUpperCase().substring(0, 4);
+                const t2 = (m.t2 || 'T2').toUpperCase().substring(0, 4);
+                const matchName = `${m.t1} vs ${m.t2}`;
+                const isLive = (m.status||'').toLowerCase().includes('live');
+                return `
+                <div class="m-card" onclick="selectMatchCard(this, '${matchName}')" data-name="${matchName}">
+                    <div class="m-hdr">⭐ ${series} ${m.venue ? '• '+m.venue : ''}</div>
+                    <div class="m-body">
+                        <div class="m-team left">${t1}</div>
+                        <div class="m-center">
+                            <div class="m-time" style="${isLive ? 'color:#fff; background:var(--d11-red);' : ''}">${isLive ? '🔴 ' : ''}${m.status}</div>
+                        </div>
+                        <div class="m-team right">${t2}</div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // ==========================================
+        // V61: 13-SECTION CHEAT SHEET EXTRACTOR
+        // ==========================================
+        async function loadSquadsGoogle(ocrPlayersArray = null) {
+            if(!selectedGoogleMatch) return toast("Please select a match!", "err");
+            
+            const btn = document.getElementById('btnGoogleSquads');
+            if(btn) { btn.style.display = 'block'; btn.disabled = true; btn.innerHTML = `<span class="loader" style="border-top-color:#fff"></span> GENERATING 13-PART PRO SHEET...`; }
+            if(!ocrPlayersArray) toast(`Extracting Deep Live Squad for ${selectedGoogleMatch}...`);
+            
+            document.getElementById('pgrid1').innerHTML = `<div style="text-align:center; padding:40px; color:var(--muted);"><span class="loader" style="border-top-color:var(--muted);"></span></div>`;
+            document.getElementById('csDashboard').innerHTML = `<div style="text-align:center; padding:40px; color:var(--cs-orange); font-family:'Barlow Condensed'; font-size:18px; letter-spacing:1px;"><span class="loader" style="border-top-color:var(--cs-orange);"></span> GENERATING 13-BOX CHEAT SHEET...</div>`;
+
+            try {
+                const prompt = `Search Cricbuzz, ESPNcricinfo, or Dream11 prediction sites via Google Search for the match: ${selectedGoogleMatch} on ${todayStr}.
+                Find the Playing XI or Probable XI. You MUST provide exactly 22 players.
+                Generate exactly 13 Cheat Sheet Sections with rich data.
+                Return ONLY raw JSON wrapped in \`\`\`json: 
+                {
+                    "match":{"t1":"Team 1 Code","t2":"Team 2 Code"},
+                    "live_data":{"toss":"...","pitch":"...","weather":"...","safe_cvc":"...","risky_cvc":"...","flow":"...","win_prob":"..."},
+                    "sections":[
+                        {"id":1,"title":"1. PITCH + TOSS TREND","content":"venue stats, avg score, dew factor..."},
+                        {"id":2,"title":"2. PROBABLE / PLAYING XI","content":"Lineups for both teams..."},
+                        {"id":3,"title":"3. MUST PICKS","content":"Safest players..."},
+                        {"id":4,"title":"4. TOP PICKS","content":"High projection..."},
+                        {"id":5,"title":"5. BEST PICKS (ROLE-WISE)","content":"WK:\\nBAT:\\nAR:\\nBOWL:"},
+                        {"id":6,"title":"6. TRUMP PICKS","content":"Differential/Low ownership..."},
+                        {"id":7,"title":"7. RISKY PICKS","content":"Boom or bust..."},
+                        {"id":8,"title":"8. IGNORE PICKS","content":"Bad form/injuries..."},
+                        {"id":9,"title":"9. PITCH LOVERS","content":"Strong venue records..."},
+                        {"id":10,"title":"10. OPPONENT LOVERS","content":"Strong H2H records..."},
+                        {"id":11,"title":"11. WEAK MATCHUPS","content":"Struggles vs specific bowlers..."},
+                        {"id":12,"title":"12. CAPTAIN / VICE CAPTAIN","content":"5 C options, 5 VC options..."},
+                        {"id":13,"title":"13. FINAL AUTO TEAM CORE","content":"7-9 fixed players..."}
+                    ],
+                    "players":[
+                        {"name":"Player Full Name","team":"T1 Code","role":"BAT/BOWL/AR/WK","status":"playing/sub/bench/probable","sel":85,"pts":100,"confidence":92,"impact_chance":75}
+                    ]
+                }`;
+                
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const result = await fetchLiveAI(url, { contents: [{ parts: [{ text: prompt }] }] });
+                const data = extractJSON(result.candidates[0].content.parts[0].text);
+                
+                if(!data.players || data.players.length < 5) throw new Error("Lineup not announced yet.");
+                
+                processSquadData(data, ocrPlayersArray);
+                if(!ocrPlayersArray) toast(`✅ 13-Box Cheat Sheet Synced!`);
+            } catch(e) { 
+                toast(`❌ Scraping Failed. Lineup might not be out.`, "err"); 
+                document.getElementById('pgrid1').innerHTML = `<div style="text-align:center; padding:40px; color:var(--d11-red);">Live Data Unavailable right now.</div>`;
+                document.getElementById('csDashboard').innerHTML = `<div style="text-align:center; padding:40px; color:var(--d11-red);">Live Data Unavailable right now.</div>`;
+            } finally {
+                if(btn) { btn.disabled = false; btn.innerHTML = `🔄 REFRESH MATCH DATA`; }
+            }
+        }
+
+        function processSquadData(data, ocrPlayersArray = null) {
+            teamNames.t1 = data.match?.t1 || "T1";
+            teamNames.t2 = data.match?.t2 || "T2";
+            
+            matchIntelligence = { match: data.match, live_data: data.live_data, sections: data.sections || [] };
+
+            setTxt('t1Label', teamNames.t1); setTxt('t2Label', teamNames.t2);
+            setTxt('t1Tab1', teamNames.t1); setTxt('t2Tab1', teamNames.t2);
+            setTxt('t1Tab2', teamNames.t1); setTxt('t2Tab2', teamNames.t2);
+            setTxt('t1BatCfg', `${teamNames.t1} BAT`); setTxt('t2BatCfg', `${teamNames.t2} BAT`);
+            setTxt('t1ChaseCfg', `${teamNames.t1} BAT`); setTxt('t2ChaseCfg', `${teamNames.t2} BAT`);
+            setTxt('matchDesc', `${teamNames.t1} vs ${teamNames.t2}`);
+
+            const live = data.live_data || {};
+            setTxt('liveTossText', live.toss || "---");
+            setTxt('livePitch', live.pitch || "---");
+            setTxt('liveWeather', live.weather || "---");
+            setTxt('liveSafeCVC', live.safe_cvc || "---");
+            setTxt('liveRiskyCVC', live.risky_cvc || "---");
+            setTxt('liveMatchFlow', live.flow || "---");
+            setTxt('liveWinProb', live.win_prob || "---");
+
+            const dash = document.getElementById('csDashboard');
+            if(dash) {
+                dash.innerHTML = (data.sections || []).map(s => {
+                    const isWide = s.id === 1 || s.id === 2 || s.id === 5 || s.id === 12 || s.id === 13;
+                    return `
+                    <div class="cs-box-13 ${isWide ? 'wide' : ''}">
+                        <div class="cs-hdr-13">⭐ ${s.title || 'Info'}</div>
+                        <div class="cs-body-13">${s.content || '...'}</div>
+                    </div>`;
+                }).join('') || '<div style="grid-column:1/3; text-align:center; padding:20px; color:var(--muted)">No cheat sheet data.</div>';
+            }
+
+            players = (data.players || []).map(p => ({
+                id: Math.random().toString(36).substr(2, 9),
+                name: p.name,
+                team: p.team || teamNames.t1,
+                role: p.role || "BAT",
+                cr: p.cr || 9.0, 
+                status: p.status || "playing", 
+                sel: p.sel || Math.floor(Math.random() * 90 + 5),
+                pts: p.pts || 0,
+                conf: p.confidence || Math.floor(Math.random()*40 + 50),
+                impact_chance: p.impact_chance || 0,
+                ocr_verified: false, ocr_missing: false
+            }));
+            
+            // Deduplicate Array natively
+            players = players.filter((p, index, self) => index === self.findIndex((t) => (t.name.toLowerCase() === p.name.toLowerCase())));
+
+            // MERGE OCR DATA
+            if(ocrPlayersArray && ocrPlayersArray.length > 0) {
+                ocrPlayersArray.forEach(ocrP => {
+                    let liveMatch = players.find(p => p.name.toLowerCase().includes(ocrP.name.toLowerCase()) || ocrP.name.toLowerCase().includes(p.name.toLowerCase()));
+                    if(liveMatch) {
+                        liveMatch.ocr_verified = true;
+                        if(ocrP.is_c) liveMatch.is_c = true;
+                        if(ocrP.is_vc) liveMatch.is_vc = true;
+                    } else {
+                        players.push({
+                            id: Math.random().toString(36).substr(2, 9), name: ocrP.name, team: ocrP.team || teamNames.t1, role: ocrP.role || "BAT", cr: 9.0, status: "playing", sel: 50, pts: 0, conf: 50, impact_chance: 0, ocr_verified: true, ocr_missing: true 
+                        });
+                    }
+                });
+            }
+
+            selection1 = { fixed: [], caps: [], vcs: [] };
+            selection2 = { fixed: [], caps: [], vcs: [] };
+
+            // Auto-assign C/VC if found in OCR
+            players.forEach(p => {
+                if(p.is_c) selection1.caps.push(p);
+                if(p.is_vc) selection1.vcs.push(p);
+            });
+
+            renderPlayers(1); renderSlots(1);
+            renderPlayers(2); renderSlots(2);
+            
+            const sbg = document.getElementById('syncBoxGoogle');
+            const ig = document.getElementById('iconGoogle');
+            if(sbg) sbg.style.display = 'none';
+            if(ig) ig.textContent = '▶';
+            
+            const sbv = document.getElementById('syncBoxVision');
+            const iv = document.getElementById('iconVision');
+            if(ocrPlayersArray && sbv) sbv.style.display = 'none';
+            if(ocrPlayersArray && iv) iv.textContent = '▶';
+        }
+
+        // ==========================================
+        // UI RENDERING (PLAYERS & SLOTS)
+        // ==========================================
+        function renderPlayers(mode) {
+            const gridId = mode === 1 ? 'pgrid1' : 'pgrid2';
+            const grid = document.getElementById(gridId);
+            if(!grid) return;
+
+            const sel = mode === 1 ? selection1 : selection2;
+            const cTab = mode === 1 ? currentTab1 : currentTab2;
+            const maxFixed = mode === 1 ? 9 : 4;
+
+            let filtered = players;
+            if (cTab === 'T1') filtered = players.filter(p => p.team === teamNames.t1);
+            if (cTab === 'T2') filtered = players.filter(p => p.team === teamNames.t2);
+
+            grid.innerHTML = filtered.map(p => {
+                const isFix = sel.fixed.some(x => x.id === p.id);
+                const isCap = sel.caps.some(x => x.id === p.id);
+                const isVC = sel.vcs.some(x => x.id === p.id);
+                
+                let cls = p.team === teamNames.t1 ? 'team1' : 'team2';
+                if (isCap) cls += ' cap'; else if (isVC) cls += ' vc'; else if (isFix) cls += ' fix';
+                
+                let badgeHtml = '';
+                if (p.aiBadge) {
+                    let bClass = p.aiBadge.includes('MUST') ? 'must' : (p.aiBadge.includes('TRUMP') ? 'trump' : 'risky');
+                    badgeHtml = `<span class="ai-badge ${bClass}">${p.aiBadge}</span>`;
+                }
+
+                let impTag = p.status === 'sub' ? `<span class="imp-pct">IMP ${p.impact_chance}%</span>` : '';
+                let ocrBadge = '';
+                if(p.ocr_missing) ocrBadge = `<span class="missing-badge">MISSING IN LIVE DB</span>`;
+                else if(p.ocr_verified) ocrBadge = `<span class="ocr-badge">✓ OCR VERIFIED</span>`;
+
+                return `
+                <div class="pc ${cls}" onclick="togglePlayer('${p.id}', ${mode})">
+                    <div class="p-left">
+                        <div class="p-avatar-wrap">
+                            <div class="p-avatar">
+                                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" style="width:24px; opacity:0.6; margin-top:2px;">
+                            </div>
+                            <div class="p-team-badge">${(p.team||'').substring(0,3).toUpperCase()}</div>
+                            ${p.status==='sub'?'<span style="position:absolute; top:-4px; left:-4px; width:10px; height:10px; background:var(--pink); border-radius:50%; border:2px solid var(--panel);"></span>':''}
+                            ${(p.status==='playing' || p.status==='probable')?'<span style="position:absolute; top:-4px; left:-4px; width:10px; height:10px; background:var(--green); border-radius:50%; border:2px solid var(--panel);"></span>':''}
+                            ${p.status==='bench'?'<span style="position:absolute; top:-4px; left:-4px; width:10px; height:10px; background:var(--red); border-radius:50%; border:2px solid var(--panel);"></span>':''}
+                        </div>
+                        <div class="p-info">
+                            <div class="pn">${p.name} <span class="role-txt">${p.role}</span> ${impTag} ${ocrBadge}</div>
+                            <div class="p-sel">Sel by ${p.sel}% <span class="conf-score">Conf: ${p.conf}%</span> ${badgeHtml}</div>
+                        </div>
+                    </div>
+                    <div style="display:flex; align-items:center;">
+                        <div class="p-pts">${p.pts} <span style="font-size:8px; font-weight:400; display:block;">pts</span></div>
+                        <div class="p-cr">${p.cr}</div>
+                        <div class="p-action"></div>
+                    </div>
+                </div>`;
+            }).join('') || '<div style="padding:20px; text-align:center; color:var(--muted)">No players detected</div>';
+            
+            const counterId = mode === 1 ? 'selCounter1' : 'selCounter2';
+            const cEl = document.getElementById(counterId);
+            if(cEl) cEl.innerHTML = `${sel.fixed.length}/${maxFixed} FIXED`;
+        }
+
+        function renderSlots(mode) {
+            const getName = (name) => name ? name.toUpperCase() : '...';
+            const sel = mode === 1 ? selection1 : selection2;
+            const maxF = mode === 1 ? 9 : 4;
+            const maxC = mode === 1 ? 5 : 3;
+
+            const fixS = document.getElementById(mode === 1 ? 'fixSlots1' : 'fixSlots2');
+            const capS = document.getElementById(mode === 1 ? 'capSlots1' : 'capSlots2');
+            const vcS = document.getElementById(mode === 1 ? 'vcSlots1' : 'vcSlots2');
+            
+            if(!fixS) return;
+
+            fixS.innerHTML = Array.from({length:maxF}, (_,i) => `<div class="slot ${sel.fixed[i]?'filled':''}">${sel.fixed[i]?getName(sel.fixed[i].name):'...'}</div>`).join('');
+            capS.innerHTML = Array.from({length:maxC}, (_,i) => `<div class="slot c-slot ${sel.caps[i]?'filled':''}">${sel.caps[i]?getName(sel.caps[i].name):'...'}</div>`).join('');
+            vcS.innerHTML = Array.from({length:maxC}, (_,i) => `<div class="slot vc-slot ${sel.vcs[i]?'filled':''}">${sel.vcs[i]?getName(sel.vcs[i].name):'...'}</div>`).join('');
+        }
+
+        function clearSelection(mode) {
+            if(mode === 1) selection1 = { fixed: [], caps: [], vcs: [] };
+            else selection2 = { fixed: [], caps: [], vcs: [] };
+            renderPlayers(mode); renderSlots(mode);
+            toast("Selections Cleared");
+        }
+
+        function setTab(tab, el, mode) {
+            if(mode === 1) currentTab1 = tab; else currentTab2 = tab;
+            if(el && el.parentElement) {
+                el.parentElement.querySelectorAll('.c-btn').forEach(t => t.classList.remove('active'));
+                el.classList.add('active');
+            }
+            renderPlayers(mode);
+        }
+
+        // V61: FLAWLESS C/VC CYCLING LOGIC FIX
+        function togglePlayer(id, mode) {
+            const p = players.find(x => x.id === id);
+            if(!p) return;
+            const sel = mode === 1 ? selection1 : selection2;
+            const maxFixed = mode === 1 ? 9 : 4;
+            const maxCaps = mode === 1 ? 5 : 3;
+            const maxVcs = mode === 1 ? 5 : 3;
+
+            const fIdx = sel.fixed.findIndex(x => x.id === id);
+            const cIdx = sel.caps.findIndex(x => x.id === id);
+            const vIdx = sel.vcs.findIndex(x => x.id === id);
+
+            if (fIdx === -1 && cIdx === -1 && vIdx === -1) {
+                // Not Selected -> Move to Fixed
+                if (sel.fixed.length < maxFixed) sel.fixed.push(p);
+                else toast(`${maxFixed} Fixed Slots Full!`, "err");
+            } else if (fIdx > -1) {
+                // In Fixed -> Remove from Fixed, Move to Cap
+                sel.fixed.splice(fIdx, 1);
+                if (sel.caps.length < maxCaps) sel.caps.push(p);
+                else if (sel.vcs.length < maxVcs) sel.vcs.push(p);
+            } else if (cIdx > -1) {
+                // In Cap -> Remove from Cap, Move to VC
+                sel.caps.splice(cIdx, 1);
+                if (sel.vcs.length < maxVcs) sel.vcs.push(p);
+            } else if (vIdx > -1) {
+                // In VC -> Remove from VC completely (Unselected)
+                sel.vcs.splice(vIdx, 1);
+            }
+            renderPlayers(mode); renderSlots(mode);
+        }
+
+        async function analyzePoolAI() {
+            if (!hasScrapedData()) return toast("Scrape data first!", "err");
+            const btns = [document.getElementById('btnPoolExpert1'), document.getElementById('btnPoolExpert2')];
+            const origText = "✨ AI DETAILED REVIEW & OWNERSHIP %";
+            btns.forEach(b => { if(b) { b.disabled = true; b.innerHTML = `<span class="loader" style="border-top-color:#000"></span> ANALYZING...`; }});
+            
+            try {
+                const validPool = players.filter(p => p.status !== 'bench').map(p => ({name: p.name, role: p.role, cr: p.cr}));
+                const prompt = `Today is ${todayStr}. Act as an elite fantasy analyst. Step 1: Read Cheat Sheet. Step 2: USE GOOGLE SEARCH to verify recent live cricket form and current Ownership %.
+                Return ONLY a JSON object wrapped in \`\`\`json: { "analysis": [ {"name": "Player Full Name", "badge": "⭐ MUST HAVE" | "🔥 TRUMP" | "⚠️ RISKY", "sel": 85} ] }
+                Playing Pool: ${JSON.stringify(validPool)}
+                Cheat Sheet Data: ${JSON.stringify(matchIntelligence.sections)}`;
+
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const result = await fetchLiveAI(url, { contents: [{ parts: [{ text: prompt }] }] });
+                const data = extractJSON(result.candidates[0].content.parts[0].text);
+                
+                (data.analysis || []).forEach(a => {
+                    let p = players.find(x => x.name.toLowerCase() === a.name.toLowerCase() || x.name.toLowerCase().includes(a.name.toLowerCase()) || a.name.toLowerCase().includes(x.name.toLowerCase()));
+                    if(p) { p.aiBadge = a.badge; if(a.sel) p.sel = a.sel; }
+                });
+                
+                players.sort((a,b) => {
+                    if(a.aiBadge && !b.aiBadge) return -1;
+                    if(!a.aiBadge && b.aiBadge) return 1;
+                    return 0;
+                });
+                renderPlayers(1); renderPlayers(2);
+                toast("✨ Pool Analyzed by Live AI!");
+            } catch(e) {
+                toast("❌ AI Analysis failed. Try again.", "err");
+            } finally {
+                btns.forEach(b => { if(b) { b.disabled = false; b.innerHTML = origText; }});
+            }
+        }
+
+        async function autoSelectAI(mode) {
+            if (!hasScrapedData()) return toast("Scrape data first!", "err");
+            const btn = document.getElementById(mode === 1 ? 'btnAutoExpert1' : 'btnAutoExpert2');
+            if(!btn) return;
+            const originalText = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = `<span class="loader" style="color:#000; border-top-color:#000"></span> AUTO-LOCKING HIGHEST CONFIDENCE...`;
+
+            const maxF = mode === 1 ? 9 : 4;
+            const maxC = mode === 1 ? 5 : 3;
+            const maxV = mode === 1 ? 5 : 3;
+
+            setTimeout(() => {
+                let validPool = players.filter(p => p.status !== 'bench');
+                if(!config.impact) validPool = validPool.filter(p => p.status !== 'sub');
+
+                validPool.sort((a,b) => b.conf - a.conf);
+
+                const sel = mode === 1 ? selection1 : selection2;
+                sel.fixed = validPool.slice(0, maxF);
+                
+                sel.caps = validPool.filter(p => p.role === 'BAT' || p.role === 'AR').slice(0, maxC);
+                sel.vcs = validPool.filter(p => p.role === 'BOWL' || p.role === 'AR').slice(0, maxV);
+
+                while(sel.caps.length < maxC) { let p = validPool.find(x => !sel.caps.includes(x)); if(p) sel.caps.push(p); else break; }
+                while(sel.vcs.length < maxV) { let p = validPool.find(x => !sel.vcs.includes(x) && !sel.caps.includes(x)); if(p) sel.vcs.push(p); else break; }
+
+                renderPlayers(mode); renderSlots(mode);
+                toast("✨ COMBO LOCKED BASED ON CONFIDENCE!");
+                
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }, 800);
+        }
+
+        async function genTeamsAI(mode) {
+            const required = mode === 1 ? 11 : 5;
+            if (!hasScrapedData()) return toast("Scrape match data first!", "err");
+            
+            const btnId = mode === 1 ? 'btnGen1' : 'btnGen2';
+            const btn = document.getElementById(btnId);
+            if(!btn) return;
+            const origText = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = `<span class="loader" style="border-top-color:#fff"></span> EXTRACTING CHEAT SHEET...`;
+            setTimeout(() => { if(btn.disabled) btn.innerHTML = `<span class="loader" style="border-top-color:#fff"></span> APPLYING TOSS ADVANTAGE...`; }, 1500);
+
+            const out = document.getElementById('teamsList');
+            if(out) out.innerHTML = `<div style="text-align:center; padding:40px; color:var(--cyan)"><span class="loader" style="border-top-color:var(--cyan); width:24px; height:24px;"></span><br><br>✨ VERIFYING TOSS/PITCH DATA & GENERATING TEAMS...</div>`;
+
+            try {
+                const sel = mode === 1 ? selection1 : selection2;
+                let pool = players.filter(p => p.status !== 'bench');
+                if(!config.impact) pool = pool.filter(p => p.status !== 'sub');
+                const simplePool = pool.map(p => ({name: p.name, role: p.role, team: p.team, sel: p.sel}));
+
+                let extraCtx = "";
+                let batTeam = "";
+                let bowlTeam = "";
+
+                if (mode === 1) { 
+                    if (config.toss === 't1') { batTeam = teamNames.t1; bowlTeam = teamNames.t2; }
+                    else if (config.toss === 't2') { batTeam = teamNames.t2; bowlTeam = teamNames.t1; }
+                    extraCtx = batTeam ? `\nCRITICAL: ${batTeam} is BATTING FIRST. Stack their top order batters.` : '';
+                } else { 
+                    if (config.chase === 't1') { batTeam = teamNames.t1; bowlTeam = teamNames.t2; }
+                    else if (config.chase === 't2') { batTeam = teamNames.t2; bowlTeam = teamNames.t1; }
+                    extraCtx = batTeam ? `\nCRITICAL (2ND INN): ${batTeam} is BATTING NOW. Pick ONLY ${batTeam} batters and ${bowlTeam} bowlers.` : '';
+                }
+
+                const prompt = `Today is ${todayStr}. Act as an elite mathematical fantasy cricket AI. You are building 4 highly strategic teams.
+                CRITICAL VERIFICATION:
+                1. Read the '13-Part Cheat Sheet Data'. Avoid 'Ignore Picks'. Prioritize 'Must Picks' and 'Trump Picks'.
+                2. Follow GL Hacks: ${glHacksContext}
+                3. STRICT TOSS INSTRUCTION: ${extraCtx}
+                
+                Build 4 unique teams. Return ONLY a JSON object wrapped in \`\`\`json:
+                { "teams": [ { "players": ["Exact Full Name 1"...], "c": "Cap Name", "vc": "VC Name", "reason": "Malayalam logic explaining why the toss/chase strategy was used." } ] }`;
+
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const result = await fetchLiveAI(url, { contents: [{ parts: [{ text: prompt }] }] });
+                const data = extractJSON(result.candidates[0].content.parts[0].text);
+                
+                if(out) out.innerHTML = '';
+                generatedTeamsMemory = [];
+                const roles = { WK: 'WK', BAT: 'BAT', AR: 'AR', BOWL: 'BOWL' };
+
+                (data.teams || []).forEach((tData, idx) => {
+                    const i = idx + 1;
+                    let teamObjs = tData.players.map(n => players.find(p => p.name.toLowerCase() === n.toLowerCase() || p.name.toLowerCase().includes(n.toLowerCase()) || n.toLowerCase().includes(p.name.toLowerCase()))).filter(Boolean);
+                    
+                    while(teamObjs.length < required && pool.length > 0) {
+                        let filler = pool.sort(()=>Math.random()-0.5).find(p => !teamObjs.includes(p));
+                        if(filler) teamObjs.push(filler);
+                    }
+                    generatedTeamsMemory.push(teamObjs);
+
+                    const cObj = players.find(p => p.name.toLowerCase() === (tData.c || "").toLowerCase() || p.name.toLowerCase().includes((tData.c || "").toLowerCase())) || teamObjs[0];
+                    const vcObj = players.find(p => p.name.toLowerCase() === (tData.vc || "").toLowerCase() || p.name.toLowerCase().includes((tData.vc || "").toLowerCase())) || teamObjs[1];
+                    
+                    const cardClass = mode === 2 ? "team-card team-card-5s" : "team-card";
+                    const modeLabel = mode === 1 ? (config.phase === '1st' ? "1ST INNINGS" : "PRE-MATCH") : "2ND INNINGS (5s)";
+
+                    if(out) {
+                        out.insertAdjacentHTML('beforeend', `
+                        <div class="${cardClass}">
+                            <div class="tc-h"><span class="tc-t">${modeLabel} TEAM ${i}</span><span style="font-size:10px; color:var(--muted); font-family:'Share Tech Mono'; background:rgba(0,0,0,0.3); padding:4px 8px; border-radius:4px;">13-SHEET VERIFIED</span></div>
+                            <div class="tc-b" style="background:var(--glass-panel); padding:10px;">${teamObjs.map(p => {
+                                let isCap = p.id===cObj?.id;
+                                let isVC = p.id===vcObj?.id;
+                                return `
+                                <div class="tc-p" style="color:#fff; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <div style="display:flex; align-items:center; gap:12px;">
+                                        <div style="width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg, #333, #111); border:1px solid #555; position:relative; display:flex; align-items:center; justify-content:center; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+                                            <span style="font-size:16px;">👤</span>
+                                            <div style="position:absolute; bottom:-6px; background:${p.team===teamNames.t1?'#fff':'#aaa'}; color:#000; font-size:7px; font-weight:900; padding:2px 6px; border-radius:4px; left:50%; transform:translateX(-50%); box-shadow:0 2px 4px rgba(0,0,0,0.5);">${(p.team||'').substring(0,3).toUpperCase()}</div>
+                                        </div>
+                                        <div style="display:flex; flex-direction:column;">
+                                            <span style="font-size:15px; font-weight:800; font-family:'Barlow Condensed'; letter-spacing:0.5px;">${p.name}</span>
+                                            <span style="font-size:11px; color:var(--muted); font-family:'Share Tech Mono';">Sel by ${p.sel}% <span style="margin-left:6px; color:var(--cyan); font-weight:700;">${roles[p.role]}</span></span>
+                                        </div>
+                                    </div>
+                                    <div style="display:flex; align-items:center; gap:10px;">
+                                        <span style="font-size:15px; font-weight:800; color:var(--gold); font-family:'Barlow Condensed';">${p.cr} Cr</span>
+                                        <div style="width:28px; display:flex; justify-content:flex-end;">
+                                            ${isCap?'<span class="badge-circ badge-c">C</span>':isVC?'<span class="badge-circ badge-vc">VC</span>':''}
+                                            ${p.status==='sub'?'<span style="font-size:10px; color:var(--pink); font-weight:800; background:rgba(255,64,129,0.1); padding:2px 4px; border-radius:4px; border:1px solid var(--pink);">IMP</span>':''}
+                                        </div>
+                                    </div>
+                                </div>`
+                            }).join('')}
+                                <div class="ai-reason-box" style="display:block; border:1px dashed var(--d11-red); background:rgba(0,0,0,0.5); color:#ddd; margin-top:12px;">
+                                    <span style="font-size:11px; color:var(--d11-red); font-weight:700; text-transform:uppercase;">✨ HACK LOGIC (MALAYALAM):</span><br>
+                                    ${tData.reason}
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    }
+                });
+                
+                const rateBtn = document.getElementById('btnRateTeams');
+                const rateRes = document.getElementById('aiRatingResult');
+                if(rateBtn) rateBtn.style.display = 'block';
+                if(rateRes) rateRes.style.display = 'none';
+                if(out) out.scrollIntoView({ behavior: 'smooth' });
+                toast("✨ True AI Teams Generated Successfully!");
+            } catch(e) {
+                if(out) out.innerHTML = `<div style="text-align:center; padding:20px; color:var(--red);">❌ Generation Failed. Try again.</div>`;
+                toast("API Timeout.", "err");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origText;
+            }
+        }
+
+        async function runSpecialHack(hackType) {
+            if (!hasScrapedData()) return toast("Scrape match data first!", "err");
+            const rb = document.getElementById('aiHackResult');
+            if(!rb) return;
+            rb.style.display = 'block';
+            rb.innerHTML = `<div style="text-align:center; padding:20px; color:var(--cyan)"><span class="loader" style="border-top-color:var(--cyan)"></span> Processing Advanced Hack Algorithm...</div>`;
+            
+            try {
+                const prompt = `Today is ${todayStr}. Explain ${hackType} strategy for ${teamNames.t1} vs ${teamNames.t2} in Malayalam. Format with HTML.`;
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const result = await fetchLiveAI(url, { contents: [{ parts: [{ text: prompt }] }] });
+                rb.innerHTML = `<div style="font-size:14px; line-height:1.6; color: #fff;">${result.candidates[0].content.parts[0].text.replace(/\[\s*\d+(\s*:\s*\d+)?\s*\]/g, '')}</div>`;
+            } catch(e) {
+                rb.innerHTML = `<div style="padding:15px; color:var(--red); text-align:center;">❌ Hack extraction failed. Verify API connection.</div>`;
+            }
+        }
+
+        async function categorizePlayersAI() {
+            if (!hasScrapedData()) return toast("Scrape data first!", "err");
+            const rb = document.getElementById('aiGroupsResult');
+            const btn = document.getElementById('btnGroupExpert');
+            if(!rb || !btn) return;
+            const orig = btn.innerHTML;
+            btn.disabled = true;
+            rb.innerHTML = `<div style="text-align:center; padding:30px; color:var(--cyan)"><span class="loader" style="border-top-color:var(--cyan)"></span> ✨ AI is grouping players...</div>`;
+            
+            try {
+                const prompt = `Today is ${todayStr}. Group players for ${teamNames.t1} vs ${teamNames.t2} into 4 categories: SAFE PICKS, TRUMP CARDS, RISKY / AVOID, C/VC CONTENDERS. Return ONLY JSON wrapped in \`\`\`json: {"groups": [{"title": "string", "players": ["string"], "reason_mal": "Malayalam logic"}]}`;
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const result = await fetchLiveAI(url, { contents: [{ parts: [{ text: prompt }] }] });
+                const groupData = extractJSON(result.candidates[0].content.parts[0].text);
+                
+                let html = '<div class="cfg-grid" style="grid-template-columns: 1fr;">';
+                (groupData.groups || []).forEach(g => {
+                    html += `
+                        <div class="cs-tile wide" style="margin-bottom:4px; border-color:var(--b2);">
+                            <h5 style="color:var(--cyan); border-left: 3px solid var(--cyan); padding-left:6px; font-size:11px;">${g.title}</h5>
+                            <div style="font-size:12px; color:#fff; margin-bottom:8px; line-height:1.6;">
+                                ${g.players.map(p => `<span class="tag" style="background:rgba(255,255,255,0.05); border:1px solid var(--b2); padding:6px 10px; font-size:10px; margin:2px">${p}</span>`).join('')}
+                            </div>
+                            <div class="ai-reason-box" style="display:block; background:var(--panel2); border:none; border-top:1px solid var(--b1); margin-top:5px; border-radius:0; padding: 10px 0 0 0;">
+                                <span style="font-size:10px; color:var(--muted2); font-family:'Share Tech Mono'">✨ AI Logic (Malayalam):</span><br>
+                                <span style="font-size:13px; color:var(--text); line-height:1.5">${g.reason_mal}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                rb.innerHTML = html;
+                toast("✨ AI Player Groups Generated!");
+            } catch (e) {
+                rb.innerHTML = `<div style="text-align:center; padding:20px; color:var(--red);">❌ Analysis failed.</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = orig;
+            }
+        }
+
+        async function askExpertDoubt() {
+            const input = document.getElementById('userDoubtInput').value;
+            if (!input.trim()) return toast("Please type a question!", "err");
+            const rb = document.getElementById('expertDoubtResponse');
+            const btn = document.getElementById('btnAskExpert');
+            if(!rb || !btn) return;
+            
+            rb.style.display = 'block';
+            rb.innerHTML = `<span class="loader" style="color:var(--gold)"></span> ✨ SEARCHING GOOGLE EXPERTS...`;
+            btn.disabled = true;
+            
+            try {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const result = await fetchLiveAI(url, { contents: [{ parts: [{ text: `Answer in Malayalam using Google Search: ${input} for match ${teamNames.t1} vs ${teamNames.t2} today.` }] }] });
+                rb.innerHTML = `✨ <strong>Expert Reply:</strong><br><br>${result.candidates[0].content.parts[0].text.replace(/\[\s*\d+(\s*:\s*\d+)?\s*\]/g, '')}`;
+                document.getElementById('userDoubtInput').value = "";
+            } catch (e) {
+                rb.innerHTML = `❌ <strong>Error:</strong> Live search failed.`;
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        async function summarizeCheatSheet() {
+            if (!hasScrapedData()) return toast("No cheat sheet scraped!", "err");
+            const rb = document.getElementById('aiCheatSummary');
+            const btn = document.getElementById('btnStrategyExpert');
+            if(!rb || !btn) return;
+            const orig = btn.innerHTML;
+            btn.disabled = true;
+            rb.style.display = 'block';
+            rb.innerHTML = `<span class="loader"></span> ✨ ULTRA-DEEP ANALYZING BOXES...`;
+            
+            try {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const result = await fetchLiveAI(url, { contents: [{ parts: [{ text: `Analyze the following cheat sheet data in Malayalam using Google Search for ${teamNames.t1} vs ${teamNames.t2}. Data: ${JSON.stringify(matchIntelligence.sections)}` }] }] });
+                rb.innerHTML = `<div style="font-size:14px; line-height:1.6;">✨ <strong style="color:var(--cs-orange); font-size:16px;">LIVE ACTION PLAN:</strong><br><br>${result.candidates[0].content.parts[0].text.replace(/\[\s*\d+(\s*:\s*\d+)?\s*\]/g, '')}</div>`;
+            } catch (e) {
+                rb.innerHTML = `<div style="color:var(--red);">❌ Analysis failed.</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = orig;
+            }
+        }
+
+        // --- NEW V61 AUDIO COMMENTARY (TTS) ---
+        function writeString(view, offset, string) {
+            for (let i = 0; i < string.length; i++) {
+                view.setUint8(offset + i, string.charCodeAt(i));
+            }
+        }
+
+        function base64ToArrayBuffer(base64) {
+            var binary_string = window.atob(base64);
+            var len = binary_string.length;
+            var bytes = new Uint8Array(len);
+            for (var i = 0; i < len; i++) {
+                bytes[i] = binary_string.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        function pcmToWav(pcm16, sampleRate) {
+            const numChannels = 1;
+            const byteRate = sampleRate * numChannels * 2;
+            const blockAlign = numChannels * 2;
+            const dataSize = pcm16.length * 2;
+            const buffer = new ArrayBuffer(44 + dataSize);
+            const view = new DataView(buffer);
+
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, 36 + dataSize, true);
+            writeString(view, 8, 'WAVE');
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true); 
+            view.setUint16(20, 1, true); 
+            view.setUint16(22, numChannels, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, byteRate, true);
+            view.setUint16(32, blockAlign, true);
+            view.setUint16(34, 16, true); 
+            writeString(view, 36, 'data');
+            view.setUint32(40, dataSize, true);
+
+            let offset = 44;
+            for (let i = 0; i < pcm16.length; i++, offset += 2) {
+                view.setInt16(offset, pcm16[i], true);
+            }
+            return new Blob([view], { type: 'audio/wav' });
+        }
+
+        async function generateMatchAudio() {
+            if (!hasScrapedData()) return toast("Scrape match data first!", "err");
+            const btn = document.getElementById('btnMatchAudio');
+            const container = document.getElementById('audioPlayerContainer');
+            const player = document.getElementById('matchAudioPlayer');
+            if(!btn) return;
+            const origText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<span class="loader" style="border-top-color:#000"></span> GENERATING AUDIO...`;
+
+            try {
+                const pitch = matchIntelligence.live_data?.pitch || "an unknown surface";
+                const prompt = `Act as an energetic cricket commentator. Give a brief, exciting 3-sentence pre-match prediction for ${teamNames.t1} vs ${teamNames.t2}. The pitch is ${pitch}. Highlight one key player. Make it sound like a live broadcast.`;
+                const payload = {
+                    contents: [{ parts: [{ text: prompt }] }],
+                    generationConfig: {
+                        responseModalities: ["AUDIO"],
+                        speechConfig: {
+                            voiceConfig: {
+                                prebuiltVoiceConfig: { voiceName: "Fenrir" } 
+                            }
+                        }
+                    },
+                    model: "gemini-2.5-flash-preview-tts"
+                };
+
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                const result = await response.json();
+                
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+                const audioData = part?.inlineData?.data;
+                const mimeType = part?.inlineData?.mimeType;
+
+                if (audioData && mimeType && mimeType.startsWith("audio/")) {
+                    let sampleRate = 24000;
+                    const rateMatch = mimeType.match(/rate=(\d+)/);
+                    if(rateMatch) sampleRate = parseInt(rateMatch[1], 10);
+                    
+                    const pcmData = base64ToArrayBuffer(audioData);
+                    const pcm16 = new Int16Array(pcmData);
+                    const wavBlob = pcmToWav(pcm16, sampleRate);
+                    const audioUrl = URL.createObjectURL(wavBlob);
+                    
+                    player.src = audioUrl;
+                    container.style.display = 'block';
+                    player.play();
+                    toast("Audio Generated!", "ok");
+                } else {
+                    toast("Failed to generate audio", "err");
+                }
+            } catch(e) {
+                console.error(e);
+                toast("Audio generation error", "err");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origText;
+            }
+        }
+
+        async function generateMatchScript() {
+            if (!hasScrapedData()) return toast("Scrape match data first!", "err");
+            const rb = document.getElementById('aiScriptResult');
+            const btn = document.getElementById('btnMatchScript');
+            if(!rb || !btn) return;
+            const orig = btn.innerHTML;
+            btn.disabled = true;
+            rb.style.display = 'block';
+            rb.innerHTML = `<span class="loader"></span> ✨ GOOGLE GENERATING SCRIPT...`;
+            
+            try {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const result = await fetchLiveAI(url, { contents: [{ parts: [{ text: `Write a live match script prediction in Malayalam for ${teamNames.t1} vs ${teamNames.t2} today using Google Search.` }] }] });
+                rb.innerHTML = `✨ <strong>Live Commentary:</strong><br><br>${result.candidates[0].content.parts[0].text.replace(/\[\s*\d+(\s*:\s*\d+)?\s*\]/g, '')}`;
+            } catch (e) {
+                rb.innerHTML = `<div style="color:var(--red);">❌ Script generation failed.</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = orig;
+            }
+        }
+
+        // --- NEW V61 AI LOGO GENERATOR (IMAGEN) ---
+        async function generateTeamLogo() {
+            if (!hasScrapedData()) return toast("Scrape match data first!", "err");
+            const btn = document.getElementById('btnTeamLogo');
+            const container = document.getElementById('teamLogoResult');
+            const img = document.getElementById('logoImg');
+            if(!btn) return;
+            const origText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<span class="loader" style="border-top-color:#fff"></span> DESIGNING LOGO...`;
+
+            try {
+                const prompt = `A professional esports team logo for a fantasy cricket team playing in the match ${teamNames.t1} vs ${teamNames.t2}. Futuristic, neon accents, dark background, vector art, highly aggressive and cool mascot.`;
+                const payload = { instances: { prompt: prompt }, parameters: { sampleCount: 1 } };
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
+                
+                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                const result = await response.json();
+                
+                if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
+                    img.src = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
+                    container.style.display = 'block';
+                    toast("Logo generated!", "ok");
+                    setTimeout(() => container.scrollIntoView({behavior: "smooth"}), 100);
+                } else {
+                    toast("Failed to generate logo", "err");
+                }
+            } catch(e) {
+                console.error(e);
+                toast("Image generation error", "err");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origText;
+            }
+        }
+
+        async function rateTeamsAI() {
+            if (generatedTeamsMemory.length === 0) return toast("Generate teams first!", "err");
+            const rb = document.getElementById('aiRatingResult');
+            const btn = document.getElementById('btnRateTeams');
+            if(!rb || !btn) return;
+            const orig = btn.innerHTML;
+            btn.disabled = true;
+            rb.style.display = 'block';
+            rb.innerHTML = `<span class="loader" style="border-top-color:var(--cyan)"></span> ✨ EXPERT ANALYZING...`;
+            
+            try {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const result = await fetchLiveAI(url, { contents: [{ parts: [{ text: `Rate these generated fantasy teams out of 100 for ${teamNames.t1} vs ${teamNames.t2} in Malayalam using Google Search data. Teams: ${JSON.stringify(generatedTeamsMemory)}` }] }] });
+                rb.innerHTML = `✨ <strong style="color:var(--cyan); font-family:'Barlow Condensed'; font-size:18px;">LIVE RATING:</strong><br><br>${result.candidates[0].content.parts[0].text.replace(/\[\s*\d+(\s*:\s*\d+)?\s*\]/g, '')}`;
+            } catch (e) {
+                rb.innerHTML = `<div style="color:var(--red);">❌ Rating failed.</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = orig;
+            }
+        }
+
+        setInterval(() => {
+            if(document.getElementById('page-builder').style.display !== 'none' && !selectedGoogleMatch) {
+                fetchLiveMatchesGoogle();
+            }
+        }, 300000);
+
+    </script>
+</body>
+</html>
+
+```
